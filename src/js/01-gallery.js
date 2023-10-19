@@ -4,12 +4,12 @@ const galleryEl = document.querySelector('.gallery');
 
 let galleryArray = [];
 
-galleryItems.forEach(image => {
+galleryItems.forEach(({ original, preview, description }) => {
   return galleryArray.push(
     `<li class="gallery__item"
-      <a class="gallery__link" href="${image.original}">
-         <img class="gallery__image"src="${image.preview}"
-            data-source="${image.original}"alt="${image.description}"
+      <a class="gallery__link" href="${original}">
+         <img class="gallery__image"src="${preview}"
+            data-source="${original}"alt="${description}"
           />
       </a>
     </li>`
@@ -19,6 +19,7 @@ galleryEl.insertAdjacentHTML('afterbegin', galleryArray.join(''));
 galleryEl.addEventListener('click', onClickImage);
 
 function onClickImage(event) {
+  event.preventDefault();
   if (event.target.nodeName != 'IMG') {
     return;
   }
@@ -27,9 +28,12 @@ function onClickImage(event) {
   );
   instance.show();
 
-  document.addEventListener('keydown', event => {
+  function onEscByttonClick(event) {
     if (event.key === 'Escape') {
       instance.close();
+      document.removeEventListener('keydown', onEscByttonClick);
+      console.log('event.key', event.key);
     }
-  });
+  }
+  document.addEventListener('keydown', onEscByttonClick);
 }
