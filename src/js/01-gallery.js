@@ -24,10 +24,15 @@ function onClickImage(event) {
     return;
   }
   const instance = basicLightbox.create(
-    `<img src="${event.target.dataset.source}" width="1280" height="720">`
+    `<img src="${event.target.dataset.source}" width="1280" height="720">`,
+    {
+      onShow: instance =>
+        document.addEventListener('keydown', onEscByttonClick),
+      onClose: instance =>
+        document.removeEventListener('keydown', onEscByttonClick),
+    }
   );
   instance.show();
-
   function onEscByttonClick(event) {
     if (event.key === 'Escape') {
       instance.close();
@@ -35,5 +40,4 @@ function onClickImage(event) {
       console.log('event.key', event.key);
     }
   }
-  document.addEventListener('keydown', onEscByttonClick);
 }
